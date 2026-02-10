@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --color-border: var(--border);
+    --color-ring: var(--ring);
+}
+
+:root {
+    --border: oklch(0.929 0.013 255.508);
+    --ring: oklch(0.704 0.04 256.788);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50
+    }
+
+    body {
+        @apply bg-slate-800 text-white
+    }
+
+
+
+
+}
+
+@utility ani-pulse {
+    @apply animate-pulse;
+    animation-delay: 300ms;
+}
+
+@utility bg-grid {
+    background-image: 
+        linear-gradient(to right, #80808012 1px, transparent 1px),
+        linear-gradient(to bottom, #80808012 1px, transparent 1px);
+    background-size: 24px 24px;
+}
