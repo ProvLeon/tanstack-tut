@@ -6,9 +6,13 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import appCss from '@/styles.css?url'
 import Header from '@/components/Header'
-
+import { getTheme, resolveTheme } from '@/lib/theme'
 
 export const Route = createRootRoute({
+  beforeLoad: async () => {
+    const theme = await getTheme()
+    return { theme }
+  },
   head: () => ({
     meta: [
       {
@@ -34,16 +38,32 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+
+  const { theme } = Route.useRouteContext()
+  const resolvedTheme = resolveTheme(theme)
+
   return (
-    <html lang="en">
+    <html lang="en" className={resolvedTheme} suppressHydrationWarning>
       <head><HeadContent /></head>
       <body>
+        {/*<ThemeProvider>*/}
+        <div className='fixed inset-0 bg-grid pointer-events-none -z-10'
+          aria-hidden='true'
+        />
+
+        <div className='fixed w-72 h-72 bg-blue-800 rounded-full -right-20 -top-30 blur-3xl opacity-10 dark:opacity-40 -z-10 pointer-events-none' />
+        <div className='fixed w-md h-112 bg-orange-500 rounded-full -left-30 -bottom-50 blur-3xl opacity-10 dark:opacity-20 -z-10 pointer-events-none' />
+
         <React.Fragment>
           <Header />
-          {children}
+
+          <main className='relative z-0 px-8'>
+            {/*</div>*/}
+            {children}
+          </main>
         </React.Fragment>
 
-        <TanStackDevtools
+        {/*<TanStackDevtools
           config={{
             position: 'bottom-right',
           }}
@@ -53,9 +73,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        />*/}
         {/*<Toaster position="top-center" richColors />*/}
         <Scripts />
+        {/*</ThemeProvider>*/}
       </body>
     </html>
   )
